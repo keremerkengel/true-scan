@@ -21,10 +21,10 @@ def simple_stem(word):
     return word
 
 # Model ve vectorizer'ı yükle
-with open('../models/logistic_model.pkl', 'rb') as f:
+with open('/models/logistic_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-with open('../models/tfidf_vectorizer.pkl', 'rb') as f:
+with open('/models/tfidf_vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 
 # Metin temizleme fonksiyonu (nltk yerine minimal)
