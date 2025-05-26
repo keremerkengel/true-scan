@@ -23,8 +23,9 @@ def simple_stem(word):
     return word
 
 # Dropbox direct download linkleri (dl=1)
-model_url = 'https://www.dropbox.com/scl/fi/4cmeox8n41z4v19iwlu2j/logistic_model.pkl?dl=1&rlkey=5j6ke6nsp5tzl2gf3ebrx9n8q'
-vectorizer_url = 'https://www.dropbox.com/scl/fi/c8b2gd3pr4bngpuuzfw0r/tfidf_vectorizer.pkl?dl=1&rlkey=nr36vphaxtzn2u2c9yh4p2thm'
+model_url = 'https://www.dropbox.com/scl/fi/4cmeox8n41z4v19iwlu2j/logistic_model.pkl?rlkey=5j6ke6nsp5tzl2gf3ebrx9n8q&st=paa7gi01&dl=1'
+vectorizer_url = 'https://www.dropbox.com/scl/fi/c8b2gd3pr4bngpuuzfw0r/tfidf_vectorizer.pkl?rlkey=nr36vphaxtzn2u2c9yh4p2thm&st=ilcl5yn5&dl=1'
+
 
 def load_pickle_from_url(url):
     r = requests.get(url)
