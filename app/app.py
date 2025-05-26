@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import re
 
+# Minimal stopwords listesi (nltk kullanılmıyor)
 stop_words = set([
     "a", "an", "the", "and", "or", "but", "if", "while", "of", "at", "by", "for", "with", "about", "against",
     "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down",
@@ -11,23 +12,22 @@ stop_words = set([
     "don", "should", "now"
 ])
 
-# PorterStemmer yerine basit kök bulma fonksiyonu ekleyelim (opsiyonel)
+# Basit kelime kök bulucu
 def simple_stem(word):
-    # Çok basit, sadece -ing, -ed, -s sonlarını keser
     if word.endswith('ing') or word.endswith('ed'):
         return word[:-3]
     if word.endswith('s'):
         return word[:-1]
     return word
 
-# Model ve vectorizer'ı yükle
-with open('/models/logistic_model.pkl', 'rb') as f:
+# Model ve vectorizer'ı yükle (app.py klasöründen ../models/ yolunu kullan)
+with open('../models/logistic_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-with open('/models/tfidf_vectorizer.pkl', 'rb') as f:
+with open('../models/tfidf_vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 
-# Metin temizleme fonksiyonu (nltk yerine minimal)
+# Temizleme fonksiyonu
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'http\S+', '', text)
@@ -37,7 +37,7 @@ def clean_text(text):
     return ' '.join(tokens)
 
 # Streamlit arayüzü
-st.title("📰 Fake News Detector (Logistic Regression - Minimal Stopwords)")
+st.title("📰 TrueScan - Fake News Detector")
 
 st.write("Bu uygulama, haberin gerçek mi sahte mi olduğunu tahmin eder ve iki sınıfa ait güven skorlarını gösterir.")
 
