@@ -4,20 +4,7 @@ import re
 import requests
 from io import BytesIO
 
-# Dropbox direct download linkleri
-model_url = 'https://www.dropbox.com/scl/fi/4cmeox8n41z4v19iwlu2j/logistic_model.pkl?dl=1&rlkey=5j6ke6nsp5tzl2gf3ebrx9n8q'
-vectorizer_url = 'https://www.dropbox.com/scl/fi/c8b2gd3pr4bngpuuzfw0r/tfidf_vectorizer.pkl?dl=1&rlkey=nr36vphaxtzn2u2c9yh4p2thm'
-
-# Modeli indir ve bellekten yükle
-def load_pickle_from_url(url):
-    r = requests.get(url)
-    r.raise_for_status()
-    return pickle.load(BytesIO(r.content))
-
-model = load_pickle_from_url(model_url)
-vectorizer = load_pickle_from_url(vectorizer_url)
-
-# Minimal stopwords ve basit temizleme fonksiyonu
+# Minimal stopwords listesi
 stop_words = set([
     "a", "an", "the", "and", "or", "but", "if", "while", "of", "at", "by", "for", "with", "about", "against",
     "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down",
@@ -27,6 +14,7 @@ stop_words = set([
     "don", "should", "now"
 ])
 
+# Basit kelime kök bulucu
 def simple_stem(word):
     if word.endswith('ing') or word.endswith('ed'):
         return word[:-3]
@@ -34,6 +22,20 @@ def simple_stem(word):
         return word[:-1]
     return word
 
+# Dropbox direct download linkleri (dl=1)
+model_url = 'https://www.dropbox.com/scl/fi/4cmeox8n41z4v19iwlu2j/logistic_model.pkl?dl=1&rlkey=5j6ke6nsp5tzl2gf3ebrx9n8q'
+vectorizer_url = 'https://www.dropbox.com/scl/fi/c8b2gd3pr4bngpuuzfw0r/tfidf_vectorizer.pkl?dl=1&rlkey=nr36vphaxtzn2u2c9yh4p2thm'
+
+def load_pickle_from_url(url):
+    r = requests.get(url)
+    r.raise_for_status()
+    return pickle.load(BytesIO(r.content))
+
+# Model ve vectorizer'ı belleğe yükle
+model = load_pickle_from_url(model_url)
+vectorizer = load_pickle_from_url(vectorizer_url)
+
+# Metin temizleme fonksiyonu
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'http\S+', '', text)
@@ -42,9 +44,10 @@ def clean_text(text):
     tokens = [simple_stem(word) for word in tokens if word not in stop_words]
     return ' '.join(tokens)
 
-import streamlit as st
+# Streamlit arayüzü
+st.title("📰 TrueScan - Fake News Detector (Dropbox Model Bellekten)")
 
-st.title("📰 TrueScan - Fake News Detector (In-memory Model Load)")
+st.write("Bu uygulama, haberin gerçek mi sahte mi olduğunu tahmin eder ve iki sınıfa ait güven skorlarını gösterir.")
 
 news_input = st.text_area("📝 Lütfen bir haber başlığı ve metni girin:")
 
